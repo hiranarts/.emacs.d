@@ -91,26 +91,6 @@
 ;; TODO change this keybinding to make it consistent with everything else
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
-;; switching between header and source files
-(defun switch-between-header-source ()
-  "Switch between header and source files with the same base name in the same directory."
-  (interactive)
-  (let* ((current-file (buffer-file-name))
-         (extension (file-name-extension current-file))
-         (base-name (file-name-sans-extension current-file))
-         (dir (file-name-directory current-file))
-         (counterpart-exts (cond
-                            ((string-match-p "\\(c\\|cpp\\|cc\\|cxx\\)" extension) '("h" "hpp" "hh" "hxx"))
-                            ((string-match-p "\\(h\\|hpp\\|hh\\|hxx\\)" extension) '("c" "cpp" "cc" "cxx"))
-                            (t nil)))  ;; No switch for unsupported extensions
-         (counterpart (seq-find (lambda (ext)
-                                  (let ((candidate (concat base-name "." ext)))
-                                    (file-exists-p (expand-file-name candidate dir))))
-                                counterpart-exts)))
-    (if counterpart
-        (find-file (expand-file-name (concat base-name "." counterpart) dir))
-      (message "No corresponding header or source file found."))))
-(evil-define-key 'normal 'global (kbd "C-s") 'switch-between-header-source)
 ;; c++ style guide
 (use-package clang-format
   :ensure t
@@ -133,10 +113,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-;;Running build.bat from root.
-(defun project-quick-compile()
-  "Run build.bat from the root of the project."
-  (interactive)
-  (let ((default-directory (project-root (project-current t))))
-    (compile "cmd.exe /c build.bat")))
-(evil-define-key 'normal 'global (kbd "C-q") 'project-quick-compile)
