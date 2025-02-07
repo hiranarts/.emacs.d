@@ -4,8 +4,8 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
  (filename . "g:/My Drive/magistrate/tasks.org")
- (front-context-string . "** TODO this is ")
- (rear-context-string . "a\")))]]\n* Tasks\n")
- (position . 125)
- (last-modified 26462 9206 291574 0))
+ (front-context-string . "** TODO check to")
+ (rear-context-string . "acs.d/init.el]]\n")
+ (position . 198)
+ (last-modified 26522 47288 451953 0))
 )

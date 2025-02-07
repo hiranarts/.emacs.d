@@ -11,7 +11,10 @@
 
 ;; Set up the visible bell
 (setq visible-bell t)
-
+;;emacs creates backup files whenever you save anything with the ending ~. it mucks up the directory and makes finding files harder
+;; this is getting rid of that
+(setq make-backup-files nil)
+;; Theme
 (load-theme 'wombat)
 ;;Functions 
 ;easy init reload
@@ -66,6 +69,7 @@
 ;;key chord will make creating custom mappings a lot easier
 (require 'key-chord)
 (key-chord-mode 1)
+
 (evil-define-key 'normal 'global (kbd "C-t") 'other-window)
 ; switch the following under spc commands
 (evil-define-key 'normal 'global (kbd "C-f") 'find-file)
@@ -74,7 +78,16 @@
 (evil-define-key 'normal 'global (kbd "C-w") 'save-buffer)
 (evil-define-key 'normal 'global (kbd "C-b") 'previous-buffer)
 (evil-define-key 'normal 'global (kbd "C-n") 'next-buffer)
-;;(key-chord-define evil-replace-state-map "jj" 'evil-normal-state)
+(evil-define-key 'normal 'global (kbd "C-q")
+  (lambda ()
+    (interactive)
+    (when (not (window-minibuffer-p)) ;; Don't kill minibuffer accidentally
+      (let ((buffer-read-only nil))  ;; Disable read-only mode
+        (kill-buffer-and-window)))))  ;; Kill buffer and close window
+
+(key-chord-define evil-replace-state-map "jj" 'evil-normal-state)
+;; key chords for more mapping options
+
 ;; org shit
 (setq org-directory "G:\\My Drive\\magistrate\\")  
 (setq org-default-notes-file (expand-file-name "tasks.org" org-directory))
@@ -139,4 +152,8 @@
   (interactive)
   (let ((default-directory (project-root (project-current t))))
     (compile "cmd.exe /c build.bat")))
-(evil-define-key 'normal 'global (kbd "C-q") 'project-quick-compile)
+(evil-define-key 'normal 'global (kbd "C-a") 'project-quick-compile)
+;; open init.el file from anywhere 
+(key-chord-define evil-normal-state-map "fh" (lambda () (interactive) (find-file "C:\\Users\\aham\\AppData\\Roaming\\.emacs.d\\init.el")))
+;; open task list from anywhere
+(key-chord-define evil-normal-state-map "fp" (lambda () (interactive) (find-file "G:\\My Drive\\magistrate\\plan.org")))
